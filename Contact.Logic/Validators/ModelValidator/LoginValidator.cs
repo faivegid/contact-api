@@ -1,9 +1,10 @@
 ﻿using Contact.DTO;
+using Contact.Models.DTOs;
 using FluentValidation;
 
 namespace Contact.Logic.Validators.ModelValidator
 {
-    public class LoginValidator : AbstractValidator<LoginRequest>
+    public class LoginValidator : AbstractValidator<LoginDTO>
     {
         public LoginValidator()
         {

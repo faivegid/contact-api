@@ -17,23 +17,19 @@ namespace Contact.Logic
     public class TokenGenerator : ITokenGenerator
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<Models.DomainModels.UserContact> _userManager;
-        private readonly ILogger<TokenGenerator> _logger;
+        private readonly UserManager<UserContact> _userManager;
 
-        public TokenGenerator(ILogger<TokenGenerator> logger, IConfiguration configuration, UserManager<Models.DomainModels.UserContact> userManager)
+        public TokenGenerator(IConfiguration configuration, UserManager<Models.DomainModels.UserContact> userManager)
         {
             _configuration = configuration;
             _userManager = userManager;
-            _logger = logger;
         }
-        public async Task<string> GenerateTokenAsync(Models.DomainModels.UserContact user)
+        public async Task<string> CreateTokenAsync(UserContact user)
         {
-            List<Claim> userClaims = GetClaims(user);
-            await AddUserRoles(user, userClaims);
+            List<Claim> userClaims = await GetClaimsAsync(user);
             SymmetricSecurityKey sigingKey = GenerateSigingKey();
             JwtSecurityToken jwtToken = GenerateToken(userClaims, sigingKey);
             string token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            _logger.LogInformation("Suecessfully Generated Token");
             return token;
         }
 
@@ -53,7 +49,7 @@ namespace Contact.Logic
             return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
         }
 
-        private async Task AddUserRoles(Models.DomainModels.UserContact user, List<Claim> userClaims)
+        private async Task AddUserRoles(UserContact user, List<Claim> userClaims)
         {
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
@@ -62,14 +58,16 @@ namespace Contact.Logic
             }
         }
 
-        private static List<Claim> GetClaims(Models.DomainModels.UserContact user)
+        private async Task<List<Claim>> GetClaimsAsync(UserContact user)
         {
-            return new List<Claim>()
+            var userClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, $"{user.LastName}, {user.FirstName}")
             };
+            await AddUserRoles(user, userClaims);
+            return userClaims;
         }
         #endregion
     }

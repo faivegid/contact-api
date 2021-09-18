@@ -1,4 +1,5 @@
 ﻿using Contact.DTO;
+using Contact.Models.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -9,16 +10,15 @@ using System.Threading.Tasks;
 
 namespace Contact.Logic.Validators.ModelValidator
 {
-    public class RegisterVAlidator : AbstractValidator<RegisterRequest>
+    public class RegisterVAlidator : AbstractValidator<RegisterDTO>
     {
         public RegisterVAlidator()
         {
             RuleFor(request => request.Email).NotEmpty().EmailAddress();
-            RuleFor(request => request.FirstName).NotEmpty().Matches(@"^[a-bA-Z]$");
-            RuleFor(request => request.LastName).NotEmpty().Matches(@"^[a-bA-Z]$");
+            RuleFor(request => request.FirstName).NotEmpty();
+            RuleFor(request => request.LastName).NotEmpty();
             RuleFor(request => request.Password).NotEmpty();
             RuleFor(request => request.ConfirmPassword).NotEmpty().Equal(request => request.Password).WithMessage("Password does not Match");
-            RuleFor(request => request.Gender).NotEmpty();
         }
     }
 }

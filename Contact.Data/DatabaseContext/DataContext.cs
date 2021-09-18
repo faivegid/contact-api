@@ -1,10 +1,10 @@
-﻿using Contact.Models;
+﻿using Contact.Models.DomainModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Contact.Data
 {
-    public class DataContext : IdentityDbContext<AppUser>
+    public class DataContext : IdentityDbContext<UserContact>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Contact.Data;
 using Contact.DTO;
-using Contact.DTO.Mappings;
+using Contact.DTO.AutoMapper;
 using Contact.Models;
 using Contact.Models.DomainModels;
 using Contact.Models.DTOs;
@@ -22,7 +22,7 @@ namespace Contact.Logic
         private readonly ILogger<Authenticator> _logger;
         private readonly IMapper _mapper;
 
-        public Authenticator(UserManager<Models.DomainModels.UserContact> userManager, ITokenGenerator tokenGenerator)
+        public Authenticator(UserManager<UserContact> userManager, ITokenGenerator tokenGenerator)
         {
             _userManager = userManager;
             _tokenGenerator = tokenGenerator;
@@ -36,7 +36,7 @@ namespace Contact.Logic
                 if (await _userManager.CheckPasswordAsync(user, loginRequest.Password))
                 {
                     var userDTO = _mapper.Map<UserContact, UserDTO>(user);
-                    userDTO.Token = await _tokenGenerator.GenerateTokenAsync(user);
+                    userDTO.Token = await _tokenGenerator.CreateTokenAsync(user);
                     return userDTO;
                 }
             }
@@ -51,7 +51,6 @@ namespace Contact.Logic
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, UserRole.Customer.ToString());
                 return _mapper.Map<UserContact, UserDTO>(user);
             }
             string message = string.Join("\n", result.Errors.Select(x => x.Description));            

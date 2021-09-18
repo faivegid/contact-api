@@ -1,30 +1,20 @@
-﻿using Contact.Models.DomainModels;
-using Contact.Repository.Implementaions;
-using Contact.Repository.Interface;
+﻿using Contact.Data;
 using Contact.Repository.UnitOfWork.Interface;
-using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contact.Repository.UnitOfWork.Implementaion
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private  IUserRepository _userRepository;
-        private readonly UserManager<Models.DomainModels.UserContact> _userManager;
-
-        public UnitOfWork(UserManager<Models.DomainModels.UserContact> userManager)
+        private readonly DataContext _context;
+        public UnitOfWork(DataContext context)
         {
-            _userManager = userManager;
+            _context = context;
         }
-        public IUserRepository Users => _userRepository ??= new UserRepository(_userManager);
 
         public void Dispose()
         {
-            _userManager.Dispose();
+            _context.Dispose();
             GC.SuppressFinalize(this);
         }
     }

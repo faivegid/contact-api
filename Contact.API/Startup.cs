@@ -1,19 +1,20 @@
 using Contact.Data;
-using Contact.Data.Interface;
+using Contact.DTO.AutoMapper;
 using Contact.Logic;
+using Contact.Logic.UploadImage;
 using Contact.Logic.Validators.Filters;
 using Contact.Logic.Validators.ModelValidator;
-using Contact.Repository;
+using Contact.Models.DTOs;
+using Contact.Repository.Implementaions;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Contact.API
 {
@@ -29,46 +30,31 @@ namespace Contact.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connect = Environment.GetEnvironmentVariable("ChasDbConnectionString");
+            services.ConfigureDatabase(Configuration);
+            services.ConfigureIdentity();
             services.AddScoped<Seeder>();
-            services.AddUseMapper()
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAuthenticator, Authenticator>();
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
-            services.AddCors(o => o.AddPolicy("AllowAll", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
-            services.AddControllers(o => o.Filters.Add<ValidationFilter>())
-                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<AppUserValidator>());
-            services.AddMvc().AddSessionStateTempDataProvider(); 
-            services.AddSession(options =>
+            services.AddAutoMapper(typeof(Mapper));
+            
+            services.ConfigureJWt(Configuration);
+            services.ConfigureSession();
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IAuthenticator, Authenticator>();
+            services.AddTransient<ITokenGenerator, TokenGenerator>();
+            services.AddTransient<IImageUploader, ImageUploader>();
+
+            services.Configure<ImageSettingDTO>(Configuration.GetSection("Cloudingary"));
+
+            services.AddCors(o =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
+                o.AddPolicy("AllowAll", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
             });
+
+            services.AddControllers(o => o.Filters.Add<ValidationFilter>())
+                .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact.API", Version = "v1" });
-
-                var securitySchema = new OpenApiSecurityScheme
-                {
-                    Description = "Using the Authorization header with the Bearer scheme.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                };
-                c.AddSecurityDefinition("Bearer", securitySchema);
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        { securitySchema, new[] { "Bearer" } }
-                    }
-                );
-
             });
         }
 
@@ -93,8 +79,7 @@ namespace Contact.API
                 await next();
             });
 
-            appSeed.AddRolesAsync().Wait(); // add roles to the database
-            appSeed.SeedAdminAsync().Wait(); // adds user with admin roles
+            //appSeed.SeedAdminAsync().Wait(); // adds user with admin roles
             
             app.UseHttpsRedirection();
             app.UseRouting();

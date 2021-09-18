@@ -1,4 +1,5 @@
 ﻿using Contact.DTO;
+using Contact.Models.DTOs;
 using System.Threading.Tasks;
 
 namespace Contact.Logic
@@ -10,13 +11,13 @@ namespace Contact.Logic
         /// </summary>
         /// <param name="loginRequest"></param>
         /// <returns>A userDTO that represents the user model</returns>
-        Task<UserDTO> Login(LoginRequest loginRequest);
+        Task<UserDTO> Login(LoginDTO loginRequest);
 
         /// <summary>
         /// registers a user with the incoming data from the DTO RegisterRequest
         /// </summary>
         /// <param name="request"></param>
         /// <returns>UserDTO which is the DTO for the user just created</returns>
-        Task<UserDTO> Register(RegisterRequest request);
+        Task<UserDTO> Register(RegisterDTO request);
     }
 }

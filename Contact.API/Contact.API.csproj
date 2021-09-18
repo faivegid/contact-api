@@ -10,6 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
@@ -17,10 +18,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contact.Data\Contact.Data.csproj" />
-    <ProjectReference Include="..\Contact.DTO\Contact.DTO.csproj" />
     <ProjectReference Include="..\Contact.Logic\Contact.Logic.csproj" />
     <ProjectReference Include="..\Contact.Models\Contact.Models.csproj" />
-    <ProjectReference Include="..\Contact.Service\Contact.Service.csproj" />
+    <ProjectReference Include="..\Contact.Repository\Contact.Repository.csproj" />
   </ItemGroup>
 
 </Project>

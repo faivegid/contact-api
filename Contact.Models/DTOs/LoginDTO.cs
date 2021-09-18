@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Contact.DTO
+namespace Contact.Models.DTOs
 {
     public class LoginDTO
     {

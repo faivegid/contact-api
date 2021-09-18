@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Contact.DTO\Contact.DTO.csproj" />
     <ProjectReference Include="..\Contact.Models\Contact.Models.csproj" />
   </ItemGroup>
 

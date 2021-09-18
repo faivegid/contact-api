@@ -8,15 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contact.DTO.Mappings
+namespace Contact.DTO.AutoMapper
 {
     public class Mapper : Profile
     {
         public Mapper()
         {
-            CreateMap<Contact, UserDTO>().ReverseMap();
-            CreateMap<Contact, UpdateUserDTO>().ReverseMap();
-            CreateMap<Contact, RegisterDTO>().ReverseMap();
+            CreateMap<UserContact, UserDTO>().ReverseMap();
+            CreateMap<UserContact, UpdateUserDTO>().ReverseMap();
+            CreateMap<UserContact, RegisterDTO>().ReverseMap();
         }
     }
 }

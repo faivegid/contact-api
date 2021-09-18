@@ -30,13 +30,13 @@ namespace Contact.Repository
         }
         public async Task<bool> UpdatePassword(string userId, UpdatePasswordDTO UpdatePassword)
         {
-            Models.DomainModels.UserContact user = await GetAsync(userId);
+            UserContact user = await GetAsync(userId);
             var result = await _userManger.ChangePasswordAsync(user, UpdatePassword.OldPassword, UpdatePassword.NewPassword);
             return Result(result);
         }
         public async Task<bool> DeleteUser(string userId)
         {
-            Models.DomainModels.UserContact user = await GetAsync(userId);
+            UserContact user = await GetAsync(userId);
             var result = await _userManger.DeleteAsync(user);
             return Result(result);
         }
@@ -47,7 +47,7 @@ namespace Contact.Repository
         }
         public async Task<UserDTO> GetByIdAsync(string userId)
         {
-            Models.DomainModels.UserContact user = await _userManger.FindByIdAsync(userId);
+            UserContact user = await _userManger.FindByIdAsync(userId);
             if (user != null)
             {
                 UserDTO userDTO = _mapper.Map<UserDTO>(user);

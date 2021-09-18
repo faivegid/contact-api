@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contact.DTO
+namespace Contact.Models.DTOs
 {
     public class UpdatePasswordDTO
     {
