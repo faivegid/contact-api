@@ -5,7 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Contact.Data\Contact.Data.csproj" />
+    <ProjectReference Include="..\Contact.DTO\Contact.DTO.csproj" />
+    <ProjectReference Include="..\Contact.Logic\Contact.Logic.csproj" />
+    <ProjectReference Include="..\Contact.Models\Contact.Models.csproj" />
+    <ProjectReference Include="..\Contact.Service\Contact.Service.csproj" />
   </ItemGroup>
 
 </Project>
