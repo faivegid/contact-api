@@ -1,8 +1,7 @@
 ﻿using Contact.Data;
-using Contact.Repository.UnitOfWork.Interface;
 using System;
 
-namespace Contact.Repository.UnitOfWork.Implementaion
+namespace Contact.Repository.RepoUnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

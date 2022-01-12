@@ -3,7 +3,6 @@ using Contact.Models.Enum;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +20,7 @@ namespace Contact.Data
             _userManager = userManager;
             _logger = logger;
         }
+
         public async Task SeedAdminAsync()
         {
             try

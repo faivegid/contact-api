@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Contact.Repository.UnitOfWork.Interface
+namespace Contact.Repository.RepoUnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {       

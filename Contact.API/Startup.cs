@@ -30,25 +30,18 @@ namespace Contact.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureDatabase(Configuration);
-            services.ConfigureIdentity();
             services.AddScoped<Seeder>();
             services.AddAutoMapper(typeof(Mapper));
             
             services.ConfigureJWt(Configuration);
             services.ConfigureSession();
 
-            services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<IAuthenticator, Authenticator>();
-            services.AddTransient<ITokenGenerator, TokenGenerator>();
-            services.AddTransient<IImageUploader, ImageUploader>();
-
             services.Configure<ImageSettingDTO>(Configuration.GetSection("Cloudingary"));
 
-            services.AddCors(o =>
-            {
-                o.AddPolicy("AllowAll", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-            });
+            //services.AddCors(o =>
+            //{
+            //    o.AddPolicy("AllowAll", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            //});
 
             services.AddControllers(o => o.Filters.Add<ValidationFilter>())
                 .AddFluentValidation(config => config.RegisterValidatorsFromAssemblyContaining<LoginValidator>());
@@ -57,6 +50,7 @@ namespace Contact.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact.API", Version = "v1" });
             });
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seeder appSeed)
@@ -69,18 +63,16 @@ namespace Contact.API
             }
 
             app.UseSession();
-            app.Use(async (context, next) =>
-            {
-                var token = context.Session.GetString("Token");
-                if (!string.IsNullOrEmpty(token))
-                {
-                    context.Request.Headers.Add("Authorization", "Bearer " + token);
-                }
-                await next();
-            });
+            //app.Use(async (context, next) =>
+            //{
+            //    var token = context.Session.GetString("Token");
+            //    if (!string.IsNullOrEmpty(token))
+            //    {
+            //        context.Request.Headers.Add("Authorization", "Bearer " + token);
+            //    }
+            //    await next();
+            //});
 
-            //appSeed.SeedAdminAsync().Wait(); // adds user with admin roles
-            
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("AllowAll");

@@ -3,6 +3,7 @@ using Contact.Logic.UploadImage;
 using Contact.Models.DomainModels;
 using Contact.Models.DTOs;
 using Contact.Repository.Implementaions;
+using Contact.Repository.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ namespace Contact.API.Controllers
             var userId = HttpContext.User.FindFirst(user => user.Type == ClaimTypes.NameIdentifier).Value;
             UserContact user = _userRepository.GetUser(user => user.Id == userId);
             var result = await _userRepository.UpdatePassword(user, update.OldPassword, update.NewPassword);
-            return result ? NoContent() : BadRequest("Invalid Password");
+            return result.Succeeded ? NoContent() : BadRequest("Invalid Password");
         }
 
         [HttpPut("uploadimage")]

@@ -9,5 +9,7 @@ namespace Contact.Data
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
+
+        public DbSet<UserContact> Users { get; set; }
     }
 }

@@ -62,8 +62,6 @@ namespace Contact.Repository.Implementations
             return await _context.SaveChangesAsync() > 0;
         }
 
-
-
         public async Task<bool> UpdateAsync(T entity)
         {
             _dbSet.Attach(entity);

@@ -39,26 +39,7 @@ namespace Contact.API
                     });
         }
 
-        public static void ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<DataContext>(options =>
-            {
-                options.UseSqlite(configuration.GetConnectionString("DbConnection"));
-            });
-        }
-
-        public static void ConfigureIdentity(this IServiceCollection services)
-        {
-            services
-                .AddIdentity<UserContact, IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>()
-                .AddDefaultTokenProviders();
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequiredLength = 9;
-            });
-        }
+       
 
         public static void ConfigureSession(this IServiceCollection services)
         {
